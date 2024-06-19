@@ -4,11 +4,11 @@ import { ethers } from "ethers";
 import { CONTRACT, ABI } from "./contract";
 
 const app = express();
-const port = 3000;
+const port = 3001;
 
 app.use(cors());
 
-const provider = new ethers.WebSocketProvider("wss://seednode.mindchain.info/ws");
+const provider = new ethers.JsonRpcProvider("https://seednode.mindchain.info/");
 
 async function getReserve() {
     const contract = new ethers.Contract(CONTRACT, ABI, provider);
