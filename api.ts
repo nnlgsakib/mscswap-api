@@ -16,7 +16,7 @@ async function getReserve() {
         const reserves = await contract.getReserves();
         const reserve0:any = ethers.formatEther(reserves._reserve0);
         const reserve1:any = ethers.formatEther(reserves._reserve1);
-        const in_usd = reserve0 / reserve1;
+        const in_usd = reserve1 / reserve0;
         return in_usd.toString(); 
     } catch (error) {
         console.error("Error fetching reserves:", error);
