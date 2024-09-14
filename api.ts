@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { ethers } from "ethers";
-import { CONTRACT, ABI } from "./contract";
+import { CONTRACT, ABI, CONTRACT_1 } from "./contract";
 
 const app = express();
 const port = 3001;
@@ -10,8 +10,8 @@ app.use(cors());
 
 const provider = new ethers.JsonRpcProvider("https://seednode.mindchain.info/");
 
-async function getReserve() {
-    const contract = new ethers.Contract(CONTRACT, ABI, provider);
+async function getReserve(con:any){
+    const contract = new ethers.Contract(con, ABI, provider);
     try {
         const reserves = await contract.getReserves();
         const reserve0:any = ethers.formatEther(reserves._reserve0);
@@ -24,9 +24,17 @@ async function getReserve() {
     }
 }
 
-app.get("/price", async (req, res) => {
+app.get("/price/mind", async (req, res) => {
     try {
-        const price = (await getReserve()).slice(0, 5);
+        const price = (await getReserve(CONTRACT)).slice(0, 5);
+        res.json({ price });
+    } catch (error:any) {
+        res.status(500).json({ error: error.message });
+    }
+});
+app.get("/price/musd", async (req, res) => {
+    try {
+        const price = (await getReserve(CONTRACT_1)).slice(0, 5);
         res.json({ price });
     } catch (error:any) {
         res.status(500).json({ error: error.message });
